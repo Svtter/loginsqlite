@@ -367,3 +367,5 @@ attach/dictionary/*
 __pypackages__
 
 .coverage
+
+temp.db

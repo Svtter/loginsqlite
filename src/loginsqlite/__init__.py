@@ -1,4 +1,3 @@
-from re import I
 import sqlite3
 from typing import Optional
 from . import err
@@ -15,6 +14,11 @@ class Logger:
             self.con = sqlite3.connect(self.filename)
         else:
             raise err.OpenedError("sqlite3 database already open")
+
+    def init_db(self):
+        """first run dbfile"""
+        self.open_db()
+        self.create_table()
 
     def close_db(self):
         if self.con:
@@ -69,3 +73,7 @@ class Logger:
         )
 
         self.commit_db()
+
+
+def get_default() -> Logger:
+    return Logger("temp.db")
