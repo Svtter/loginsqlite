@@ -44,8 +44,17 @@ class Logger:
         """handler for logging library"""
         pass
 
+    def has_table(self) -> bool:
+        cur = self.get_cursor()
+        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='log';")
+        res = cur.fetchone()
+        return res is not None
+
     def info(self, msg):
         from datetime import datetime
+
+        if not self.has_table():
+            self.create_table()
 
         if not isinstance(msg, str):
             raise TypeError("msg must be a string")
@@ -55,7 +64,7 @@ class Logger:
         cur.execute(
             f"""
             INSERT INTO log values
-            ({current_time},'INFO', {msg})
+            ("{current_time}","INFO", "{msg}")
         """
         )
 
